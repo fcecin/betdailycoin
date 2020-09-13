@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Term::ReadKey;              # sudo apt-get install libterm-readkey
+#use Term::ReadKey;              # sudo apt-get install libterm-readkey
 use JSON qw( decode_json );     # sudo apt-get install libjson-perl
 use LWP::Simple;                # From CPAN
 
@@ -45,12 +45,12 @@ my $contract = "betdailycoin";
 #   account to commit and reveal games, withdraw, etc. 
 # Make sure you have the active key for this in the locally installed cleos.
 
-my $host_account = "******* PUT YOUR BOT'S EOSIO ACCOUNT NAME HERE *********";
+my $host_account = "betxdlbot111";
 
 
 # Unlock password for the locally installed cleos
 
-my $cleos_wallet_password = "******* PUT YOUR CLEOS PASSWORD HERE *******";
+my $cleos_wallet_password = "PW5JkgQf8cAmaMxxAvEPrVDDxDTg1RzfLKDT5CtAGftGsuy5iZMmy";
 
 
 # This is an append-only / write-only log file that backs up EVERY SINGLE
@@ -291,11 +291,11 @@ my $print_quit_help;
 	print("Loaded $sz EOSIO API endpoints from '$endpoints_file' file.\n");
 	if ($sz == 0) {
 	    print("ERROR: No known EOSIO API endpoints to connect to. Please add them to the endpoints file.\n");
-            next;
+            exit;
         }
     } else {
 	print("ERROR: Cannot open endpoints file '$endpoints_file' for reading. No endpoints known. Can't do anything.\n");
-	next;
+	exit;
     }
 
     # ---- Choose random API endpoint for this cycle ------------------
@@ -314,6 +314,13 @@ my $print_quit_help;
     # ---- cleos wallet unlock ----------------------------------------
 
     my $cleos;
+
+    $cleos = `cleos wallet open`;
+    if ($?) {
+	print ("ERROR: Cannot call cleos. Make sure it is installed in the path (the EOSIO binary distribution should have done that).\n");
+	exit;
+    }
+    print("cleos wallet open returned: $cleos");
 
     $cleos = `cleos wallet lock`;
     if ($?) {
